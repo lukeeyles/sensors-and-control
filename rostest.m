@@ -1,3 +1,7 @@
+% sources:
+% https://au.mathworks.com/help/ros/ug/exchange-data-with-ros-publishers-and-subscribers.html
+% https://au.mathworks.com/matlabcentral/answers/418071-how-to-use-timer-function-to-send-ros-messages
+
 clear; close;
 ip = '192.168.174.128';
 rosinit(ip,11311)
