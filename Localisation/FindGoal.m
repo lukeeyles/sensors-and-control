@@ -1,3 +1,9 @@
+% Description : Find goal poses given the square pose and odometry
+% Parameters :  squarecentre - location of square [x,y]
+%               squarenormal - normal of the square [x,y]
+%               odom - robot odometry message (nav_msgs/Odometry)
+% Return:       goal1 - first goal [x,y,theta]
+%               goal2 - second goal [x,y,theta]
 function [goal1, goal2] = FindGoal(squarecentre, squarenormal, odom)
 % goal 1 at the perpendicular intersection of robot and square normal
 % solve linear eqns to find perpendicular intersection
