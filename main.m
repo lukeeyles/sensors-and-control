@@ -38,7 +38,7 @@ while numqr > 0
         reachedGoal = false;
         while ~reachedGoal
             % use p control to calculate control
-            [twistmsg,reachedGoal] = DriveAngle(angle,odomGlobal); % TODO
+            [twistmsg,reachedGoal] = DriveToAngle(angle,odomGlobal); % TODO
         end
         
         % read depth and rgb images, convert to matlab format
