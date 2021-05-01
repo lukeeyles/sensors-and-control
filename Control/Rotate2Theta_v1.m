@@ -37,13 +37,20 @@ goalTheta = 175;
 % Set allowable error
 goalThetaThreshold = 0.1;
 
-% Keep checking and comparing the current theta 
-% while it is not within the range of the desired theta
+% Keep rotating and comparing the current theta while it is not within the range of the desired theta
 while~((goalTheta-goalThetaThreshold <= currentTheta) && (currentTheta <= goalTheta+goalThetaThreshold))     
+    
+    % Extract theta
+    odomMsg = receive(odomSub, 3);
+    pose = odomMsg.Pose.Pose;
+    quat = pose.Orientation;
+    angles = quat2eul([quat.W quat.X quat.Y quat.Z]);  
+    currentTheta = rad2deg(angles(1));
+    [currentTheta, goalTheta]          % Display both thetas
     
     % Set angular velocity
     velAngular = 0.01*abs(goalTheta - currentTheta);        %proportional controller
-
+    
     % Rotation direction decision
     if( (goalTheta >= 0) && (goalTheta <= 180) && (goalTheta < currentTheta) )
         robotTwist.Angular.Z = -velAngular;
@@ -57,15 +64,7 @@ while~((goalTheta-goalThetaThreshold <= currentTheta) && (currentTheta <= goalTh
         robotTwist.Angular.Z = velAngular;
     end
     
-    % Extract theta
-    odomMsg = receive(odomSub, 3);
-    pose = odomMsg.Pose.Pose;
-    quat = pose.Orientation;
-    angles = quat2eul([quat.W quat.X quat.Y quat.Z]);  
-    currentTheta = rad2deg(angles(1));
-    [currentTheta, goalTheta]          % Display both thetas
-
-    % Publish twist and begin rotating
+    % Publish twist and rotate
     send(robotCmd,robotTwist);
 
 end
