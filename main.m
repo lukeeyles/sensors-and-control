@@ -38,7 +38,7 @@ while numqr > 0
         reachedGoal = false;
         while ~reachedGoal
             % use p control to calculate control
-            [twistmsg,reachedGoal] = DriveAngle(angle,odomGlobal);  
+            [twistmsg,reachedGoal] = DriveAngle(angle,odomGlobal); % TODO
         end
         
         % read depth and rgb images, convert to matlab format
@@ -48,7 +48,7 @@ while numqr > 0
         rgb = readImage(rgbmsg);
         
         % look for qr code in rgb image
-        region = FindQRRegion(rgb); % find general location
+        region = FindQRRegion(rgb); % TODO find general location
         [msg,~,qrloc] = readBarcode(rgb,region); % scan qr code
         
         % check if we have successfully read the qr code
@@ -59,10 +59,10 @@ while numqr > 0
     end
     
     % find global 3D coords of qr code
-    globalCoords = FindGlobalCoords(qrloc,rgb,depth,odomGlobal);
+    globalCoords = FindGlobalCoords(qrloc,rgb,depth,odomGlobal);  % TODO
     
     % find normal and centre of qr code
-    [normal,centre] = FindQRPose(globalCoords);
+    [normal,centre] = FindQRPose(globalCoords);  % TODO
     
     % find robot goal poses
     [goal1,goal2] = FindGoal(centre,normal,odomGlobal);
@@ -70,11 +70,11 @@ while numqr > 0
     % go to goal poses
     reachedGoal = false;
     while ~reachedGoal
-        [twistmsg,reachedGoal] = DriveToGoal(goal1,odomGlobal);  
+        [twistmsg,reachedGoal] = DriveToGoal(goal1,odomGlobal); % TODO
     end
     reachedGoal = false;
     while ~reachedGoal
-        [twistmsg,reachedGoal] = DriveToGoal(goal2,odomGlobal);  
+        [twistmsg,reachedGoal] = DriveToGoal(goal2,odomGlobal); % TODO
     end
 end
 
