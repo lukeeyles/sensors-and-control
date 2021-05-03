@@ -26,8 +26,8 @@ t.Period = 0.1;
 start(t);
 
 % main loop
-numqr = 3; % number of qr codes to read
-while numqr > 0
+numcards = 3; % number of cards to read
+while numcards > 0
     qrloc = [];
     depth = [];
     rgb = [];
@@ -43,22 +43,15 @@ while numqr > 0
         depth = readImage(depthmsg);
         rgb = readImage(rgbmsg);
         
-        % look for qr code in rgb image
-        region = FindQRRegion(rgb); % TODO find general location
-        [msg,~,qrloc] = readBarcode(rgb,region); % scan qr code
-        
-        % check if we have successfully read the qr code
-        if msg ~= ""
-            numqr = numqr - 1;
-            break;
-        end
+        % look for playing card in rgb image
+        cardloc = FindCardLocation(numcards); % TODO find location of 2 points on card
     end
     
-    % find global 3D coords of qr code
-    globalCoords = FindGlobalCoords(qrloc,rgb,depth,odomGlobal);  % TODO
+    % find global 3D coords of card
+    globalCoords = FindGlobalCoords(cardloc,rgb,depth,odomGlobal);  % TODO
     
-    % find normal and centre of qr code
-    [normal,centre] = FindQRPose(globalCoords);  % TODO
+    % find normal and centre of card
+    [normal,centre] = FindSquarePose(globalCoords);  % TODO
     
     % find robot goal poses
     [goal1,goal2] = FindGoal(centre,normal,odomGlobal);
