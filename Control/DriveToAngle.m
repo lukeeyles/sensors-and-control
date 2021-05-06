@@ -14,7 +14,7 @@ currentTheta = rad2deg(angles(1))         % quat2eul returns euler angle rotatio
 %% Rotate to goal orientation
 
 % Define goal theta
-goalTheta = angle;
+goalTheta = rad2deg(angle);
 % Set allowable error
 goalThetaThreshold = 0.1;
 

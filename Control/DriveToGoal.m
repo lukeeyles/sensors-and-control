@@ -5,7 +5,7 @@ global twistmsg;
 %% Define goal
 goalX = goal(1);
 goalY = goal(2);
-goalTheta = goal(3);
+goalTheta = rad2deg(goal(3));
 
 %% Get initial Odometry
 odomMsg = receive(odomsub);
