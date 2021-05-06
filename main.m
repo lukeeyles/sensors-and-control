@@ -14,6 +14,7 @@ depthsub = rossubscriber('/camera/depth/image','DataFormat','struct'); % not sur
 odomsub = rossubscriber('/odom',@OdomCallback,'DataFormat','struct');
 velpub = rospublisher('/cmd_vel','geometry_msgs/Twist');
 global odomGlobal; % to store most recent odometry
+global twistmsg;    % to store most recent velocities
 
 % define starting twist message to send
 twistmsg = rosmessage('geometry_msgs/Twist');
