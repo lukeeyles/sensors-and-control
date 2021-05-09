@@ -49,10 +49,10 @@ while numcards > 0
     end
     
     % find global 3D coords of card
-    globalCoords = FindGlobalCoords(cardloc,rgb,depth,odomGlobal);  % TODO
+    globalCoords = FindGlobalCoords(cardloc,rgb,depth,odomGlobal);
     
     % find normal and centre of card
-    [normal,centre] = FindSquarePose(globalCoords);  % TODO
+    [normal,centre] = FindSquarePose(globalCoords(:,1:2));
     
     % find robot goal poses
     [goal1,goal2] = FindGoal(centre,normal,odomGlobal);
