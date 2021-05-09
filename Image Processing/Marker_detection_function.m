@@ -1,4 +1,4 @@
-function [pointRight, pointLeft] = untitled2(marker,image)
+function [pointRight, pointLeft] = Marker_detection_function(marker,image)
 
 %% Load reference image, and compute surf features
 marker = imread('marker_2.jpg');
