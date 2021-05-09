@@ -2,9 +2,9 @@
 %               reference frame
 % Parameters :  cameracoords - [x, y, z] coords in camera reference frame
 %               odom - robot odometry message
-%               cameraheight - height of camera on turtlebot
 % Return :      globalcoords - [x, y, z] coords in global reference frame
-function globalcoords = TurtlebotCameraToGlobalCoords(cameracoords, odom, cameraheight)
+function globalcoords = TurtlebotCameraToGlobalCoords(cameracoords, odom)
+cameraheight = 0.1;
 RobotRotation = 2*acos(odom.Pose.Pose.Orientation.W);
 T_OC = transl(cameracoords);
 T_CR = transl([0 0 cameraheight])*trotx(-pi/2)*troty(pi/2);
