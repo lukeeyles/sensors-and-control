@@ -9,9 +9,9 @@ catch exp
 end
 
 % subscribers and publishers
-rgbsub = rossubscriber('/camera/rgb/image_raw','DataFormat','struct');
-depthsub = rossubscriber('/camera/depth/image','DataFormat','struct'); % not sure if topic name is correct
-odomsub = rossubscriber('/odom',@OdomCallback,'DataFormat','struct');
+rgbsub = rossubscriber('/camera/color/image_raw');
+depthsub = rossubscriber('/camera/depth/image_raw');
+odomsub = rossubscriber('/odom',@OdomCallback);
 velpub = rospublisher('/cmd_vel','geometry_msgs/Twist');
 global odomGlobal; % to store most recent odometry
 global twistmsg;    % to store most recent velocities
@@ -33,7 +33,7 @@ while numcards > 0
     depth = [];
     rgb = [];
     
-    % look for qr code
+    % look for marker
     angleIncrement = pi/8;
     for angle = -pi:angleIncrement:pi
         DriveToAngle(angle,odomsub);
@@ -45,11 +45,11 @@ while numcards > 0
         rgb = readImage(rgbmsg);
         
         % look for playing card in rgb image
-        cardloc = FindCardLocation(numcards); % TODO find location of 2 points on card
+        [card1,card2] = FindCardLocation(numcards); % TODO find location of 2 points on card
     end
     
     % find global 3D coords of card
-    globalCoords = FindGlobalCoords(cardloc,rgb,depth,odomGlobal);
+    globalCoords = FindGlobalCoords([card1;card2],rgb,depth,odomGlobal);
     
     % find normal and centre of card
     [normal,centre] = FindSquarePose(globalCoords(:,1:2));
