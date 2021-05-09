@@ -19,4 +19,8 @@ goal1 = [intersection, direction1];
 
 % goal 2 at the square - project out 20cm
 direction2 = cart2pol(-squarenormal(1),-squarenormal(2));
-goal2 = [squarecentre+0.2*squarenormal, direction2];
+if X(2) > 0 % normal faces robot
+    goal2 = [squarecentre+0.2*squarenormal, direction2];
+else % normal faces away from robot
+    goal2 = [squarecentre-0.2*squarenormal, direction2];
+end
