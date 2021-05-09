@@ -36,7 +36,7 @@ while numcards > 0
     % look for qr code
     angleIncrement = pi/8;
     for angle = -pi:angleIncrement:pi
-        DriveToAngle(angle,odomsub); % TODO
+        DriveToAngle(angle,odomsub);
         
         % read depth and rgb images, convert to matlab format
         depthmsg = receive(depthsub,2);
@@ -58,8 +58,8 @@ while numcards > 0
     [goal1,goal2] = FindGoal(centre,normal,odomGlobal);
     
     % go to goal poses
-    DriveToGoal(goal1,odomsub); % TODO
-    DriveToGoal(goal2,odomsub); % TODO
+    DriveToGoal(goal1,odomsub);
+    DriveToGoal(goal2,odomsub);
 end
 
 stop(t); % stop timer
