@@ -8,7 +8,8 @@
 function globalCoords = FindGlobalCoords(cardloc,rgbimg,depthimg,odom,calibrationMatrix)
 depthidx = round(size(depthimg).*cardloc./size(rgbimg,1,2)); % resize coords so we can find the same point on the depth image
 depth = [depthimg(depthidx(1,1),depthidx(1,2)); depthimg(depthidx(2,1),depthidx(2,2))];
-% TODO transform depth to actual depth in m....
+% transform depth to m
+depth = depth/1000;
 
 globalCoords = zeros(2,3);
 for i = 1:size(depth,1)
