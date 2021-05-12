@@ -2,6 +2,7 @@
 function [pointRight, pointLeft] = MarkerDetection(marker,image)
 
 %% Load reference image, and compute surf features
+marker = imread(marker);
 ref_img_1_gray = rgb2gray(marker);
 ref_pts = detectSURFFeatures(ref_img_1_gray);
 [ref_features,  ref_validPts] = extractFeatures(ref_img_1_gray,  ref_pts);
