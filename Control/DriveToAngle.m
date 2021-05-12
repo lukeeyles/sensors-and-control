@@ -16,7 +16,7 @@ currentTheta = rad2deg(angles(1))         % quat2eul returns euler angle rotatio
 % Define goal theta
 goalTheta = rad2deg(angle);
 % Set allowable error
-goalThetaThreshold = 0.1;
+goalThetaThreshold = 1;
 
 % Keep rotating and comparing the current theta while it is not within the range of the desired theta
 while~((goalTheta-goalThetaThreshold <= currentTheta) && (currentTheta <= goalTheta+goalThetaThreshold))     
