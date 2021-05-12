@@ -1,12 +1,13 @@
 clear; close;
-ip = '192.168.174.128';
+ip = '192.168.0.20';
 
 % intialise ros if it isn't initialised
 try
     rosnode list
 catch exp
-    rosinit(ip,11311)
+    rosinit(ip,11311,'NodeHost','192.168.0.2')
 end
+
 
 % subscribers and publishers
 rgbsub = rossubscriber('/camera/color/image_raw');
@@ -15,7 +16,7 @@ odomsub = rossubscriber('/odom',@OdomCallback);
 velpub = rospublisher('/cmd_vel','geometry_msgs/Twist');
 global odomGlobal; % to store most recent odometry
 global twistmsg;    % to store most recent velocities
-
+%%
 % define starting twist message to send
 twistmsg = rosmessage('geometry_msgs/Twist');
 
