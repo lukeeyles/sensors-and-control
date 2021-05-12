@@ -1,4 +1,4 @@
-
+%%
 function [pointRight, pointLeft] = MarkerDetection(marker,image)
 
 %% Load reference image, and compute surf features
@@ -35,6 +35,13 @@ index_pairs = matchFeatures(ref_features, I_features);
 
 ref_matched_pts = ref_validPts(index_pairs(:,1)).Location;
 I_matched_pts = I_validPts(index_pairs(:,2)).Location;
+%% if not enough matched points found return 0
+ count_rows=height(index_pairs)
+ if count_rows < 20
+      pointRight=[0 0]
+      pointLeft= [0 0]
+      return 
+ end
 %% visual of matched fetures 
 % figure, showMatchedFeatures(image, marker, I_matched_pts, ref_matched_pts, 'montage');
 % title('Showing all matches');
