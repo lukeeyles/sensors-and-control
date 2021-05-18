@@ -16,7 +16,7 @@ currentX = pose.Position.X;
 currentY = pose.Position.Y;
 % z = pose.Position.Z;
 % [x,y,z]       % display coordinates
-currentPos = [currentX,currentY]
+currentPos = [currentX,currentY];
 
 % Extract the current theta
 quat = pose.Orientation;
@@ -42,15 +42,15 @@ while(distanceRemaining > distanceThreshold)
     % Extract current theta
     quat = pose.Orientation;
     angles = quat2eul([quat.W quat.X quat.Y quat.Z]);  
-    currentTheta = rad2deg(angles(1))
+    currentTheta = rad2deg(angles(1));
     
     % Calculate how much rotation is needed to face the goal
-    angleToGoal = rad2deg(atan2(goalY-currentY,goalX-currentX))
+    angleToGoal = rad2deg(atan2(goalY-currentY,goalX-currentX));
     angleDifference = angleToGoal - currentTheta;
     % Calculate distance remaining to goal
     distanceRemaining = sqrt( (goalX - currentX).^2 + (goalY - currentY).^2 );
     
-    [angleDifference,distanceRemaining]
+    [angleDifference,distanceRemaining];
     
     velAngular = 0.15;
     velLinear = 0.2 + 0.05*distanceRemaining;
@@ -100,10 +100,10 @@ while ~((goalTheta-goalThetaThreshold <= currentTheta) && (currentTheta <= goalT
     quat = pose.Orientation;
     angles = quat2eul([quat.W quat.X quat.Y quat.Z]);  
     currentTheta = rad2deg(angles(1));
-    [currentTheta, goalTheta]          % Display both thetas
+    [currentTheta, goalTheta];          % Display both thetas
     
     % Set angular velocity
-    velAngularMin = 0.1
+    velAngularMin = 0.1;
     twistmsg.Linear.X = 0;
     velAngular = 0.01*abs(goalTheta - currentTheta);        % with proportional controller
     
