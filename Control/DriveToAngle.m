@@ -9,7 +9,7 @@ odomMsg = receive(odomsub);
 pose = odomMsg.Pose.Pose;           % need to acces the pose message which is 2 levels into nav_msgs/Odometry structure
 quat = pose.Orientation;
 angles = quat2eul([quat.W quat.X quat.Y quat.Z]);  
-currentTheta = rad2deg(angles(1))         % quat2eul returns euler angle rotations in order of "ZYX" --> Only interested in Z-axis (first element)
+currentTheta = rad2deg(angles(1));         % quat2eul returns euler angle rotations in order of "ZYX" --> Only interested in Z-axis (first element)
 
 %% Rotate to goal orientation
 
@@ -27,7 +27,7 @@ while~((goalTheta-goalThetaThreshold <= currentTheta) && (currentTheta <= goalTh
     quat = pose.Orientation;
     angles = quat2eul([quat.W quat.X quat.Y quat.Z]);  
     currentTheta = rad2deg(angles(1));
-    [currentTheta, goalTheta]          % Display both thetas
+    [currentTheta, goalTheta];          % Display both thetas
     
     % Set angular velocity
     velAngular = 0.01*abs(goalTheta - currentTheta);        %proportional controller
