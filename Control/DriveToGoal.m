@@ -1,4 +1,4 @@
-function DriveToGoal(goal,odomsub)
+function DriveToGoal(goal,odomsub,angulargain)
 
 global twistmsg;
 
@@ -105,7 +105,7 @@ while ~((goalTheta-goalThetaThreshold <= currentTheta) && (currentTheta <= goalT
     % Set angular velocity
     velAngularMin = 0.1;
     twistmsg.Linear.X = 0;
-    velAngular = 0.01*abs(goalTheta - currentTheta);        % with proportional controller
+    velAngular = angulargain*abs(goalTheta - currentTheta);        % with proportional controller
     
     if (velAngular < velAngularMin)
         velAngular = velAngularMin;
