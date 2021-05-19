@@ -1,4 +1,4 @@
-function DriveToAngle(angle,odomsub)
+function DriveToAngle(angle,odomsub,gain)
     
 global twistmsg;
 
@@ -30,7 +30,7 @@ while~((goalTheta-goalThetaThreshold <= currentTheta) && (currentTheta <= goalTh
     [currentTheta, goalTheta];          % Display both thetas
     
     % Set angular velocity
-    velAngular = 0.01*abs(goalTheta - currentTheta);        %proportional controller
+    velAngular = gain*abs(goalTheta - currentTheta);        %proportional controller
     
     % Rotation direction decision
     if( (goalTheta >= 0) && (goalTheta <= 180) && (goalTheta < currentTheta) )
