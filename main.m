@@ -21,8 +21,8 @@ global twistmsg;    % to store most recent velocities
 % define starting twist message to send
 twistmsg = rosmessage('geometry_msgs/Twist');
 
-K = [1403.06235712328 0 921.811399720350;
-    0 1400.47365728127 546.733853185706;
+K = [1403.06235712328/2.25 0 921.811399720350/2.25;
+    0 1400.47365728127/2.25 546.733853185706/2.25;
     0 0	1];
 
 % create timer to send twist messages
