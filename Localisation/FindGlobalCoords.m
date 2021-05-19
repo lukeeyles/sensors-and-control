@@ -17,7 +17,8 @@ meanpointscaled = round(size(depthimg).*meanpoint./size(rgbimg,1,2));
 centredistance = meanpointscaled(2) - leftpointscaled(2);
 
 % match centroid in depth image to centre in rgb image
-centroids = FindCentroids(depthimg)
+arearange = [2000 15000];
+centroids = FindCentroids(depthimg,arearange);
 closestcentroid = FindClosestPoint(meanpointscaled,fliplr(centroids))
 depthidx(1,:) = closestcentroid + [0 centredistance];
 depthidx(2,:) = closestcentroid - [0 centredistance];
