@@ -40,12 +40,12 @@ plot(initialodom.Pose.Pose.Position.X,initialodom.Pose.Pose.Position.Y,'r.');
 hold on;
 
 % main loop
-markernames = ["marker_1.jpg","marker_2.jpg","marker_3.jpg"];
+%markernames = ["marker_1.jpg","marker_2.jpg","marker_3.jpg"];
 markernames = ["marker_1.jpg"];
 for i = 1:numel(markernames)
     startodom = odomsub.LatestMessage;
-    startangle = startodom.Pose.Pose.Position.Orientation;
-    startangle = quat2eul(startangle.X,startangle.Y,startangle.Z,startangle.W);
+    startangle = startodom.Pose.Pose.Orientation;
+    startangle = quat2eul([startangle.W,startangle.X,startangle.Y,startangle.Z]);
     startangle = startangle(1)
     
     qrloc = [];
@@ -53,8 +53,9 @@ for i = 1:numel(markernames)
     rgb = [];
     
     % look for marker
-    angleIncrement = pi/8;
-    for angle = (0:angleIncrement:2*pi)-startangle
+    angleIncrement = pi/12;
+    angles = wrapToPi((0:angleIncrement:2*pi)-startangle);
+    for angle = angles
         fprintf("Driving to angle: %d\n",rad2deg(angle));
         DriveToAngle(angle,odomsub);
         
@@ -64,38 +65,47 @@ for i = 1:numel(markernames)
         depth = readImage(depthmsg);
         rgb = readImage(rgbmsg);
         disp("Received images");
+        fn = sprintf('images_%f_%f.mat',i,angle);
+        save(fn,'rgb','depth');
         
         % look for marker in rgb image
         [pointr,pointl] = MarkerDetection(markernames(i),rgb); % find location of 2 points on marker
         if (~all(pointr==0) && ~all(pointl==0))
-            fprintf("Found marker at: %d, %d\n",pointr(1),pointr(2));
+            fprintf("Found marker at: %f, %f\n",pointr(1),pointr(2));
             break
         end
     end
     
-    % find global 3D coords of card
-    globalCoords = FindGlobalCoords([pointr;pointl],rgb,depth,odomGlobal,K);
-    fprintf("Marker at: %d, %d\n",globalCoords(1),globalCoords(2));
-    figure(2)
-    plot(globalCoords(1,1),globalCoords(1,2),'r*');
-    plot(globalCoords(2,1),globalCoords(2,2),'r*');
-    
-    % find normal and centre of card
-    [normal,centre] = FindSquarePose(globalCoords(:,1:2));
-    
-    % find robot goal poses
-    [goal1,goal2] = FindGoal(centre,normal,odomGlobal)
-    figure(2)
-    plot(goal1(1),goal1(2),'b*');
-    plot(goal2(1),goal2(2),'g*');
-    
-    % go to goal poses
-    DriveToGoal(goal1,odomsub);
-    disp("Reached goal 1");
-    pause(2);
-    DriveToGoal(goal2,odomsub);
-    disp("Reached goal 2");
+    if (~all(pointr==0) && ~all(pointl==0))
+        % find global 3D coords of card
+        globalCoords = FindGlobalCoords([pointr;pointl],rgb,depth,odomGlobal,K);
+        fprintf("Marker at: %f, %f\n",globalCoords(1),globalCoords(2));
+        figure(2)
+        plot(startodom.Pose.Pose.Position.X,startodom.Pose.Pose.Position.Y,'k*');
+        plot(globalCoords(1,1),globalCoords(1,2),'r*');
+        plot(globalCoords(2,1),globalCoords(2,2),'r*');
+
+        % find normal and centre of card
+        [normal,centre] = FindSquarePose(globalCoords(:,1:2));
+
+        % find robot goal poses
+        [goal1,goal2] = FindGoal(centre,normal,odomGlobal,0.2)
+        figure(2)
+        plot(goal1(1),goal1(2),'b*');
+        plot(goal2(1),goal2(2),'g*');
+
+        % go to goal poses
+        DriveToGoal(goal1,odomsub);
+        disp("Reached goal 1");
+        DriveToGoal(goal2,odomsub);
+        disp("Reached goal 2");
+
+        % go back to initial position
+        goal3 = [initialodom.Pose.Pose.Position.X,initialodom.Pose.Pose.Position.Y,0];
+        DriveToGoal(goal3,odomsub);
+    end
 end
+
 
 pause(1)
 stop(t); % stop timer
