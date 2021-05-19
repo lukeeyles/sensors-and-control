@@ -57,7 +57,7 @@ for i = 1:numel(markernames)
     angles = wrapToPi((0:angleIncrement:2*pi)-startangle);
     for angle = angles
         fprintf("Driving to angle: %d\n",rad2deg(angle));
-        DriveToAngle(angle,odomsub);
+        DriveToAngle(angle,odomsub,0.03);
         
         % read depth and rgb images, convert to matlab format
         depthmsg = receive(depthsub,2);
@@ -95,14 +95,14 @@ for i = 1:numel(markernames)
         plot(goal2(1),goal2(2),'g*');
 
         % go to goal poses
-        DriveToGoal(goal1,odomsub);
+        DriveToGoal(goal1,odomsub,0.03);
         disp("Reached goal 1");
-        DriveToGoal(goal2,odomsub);
+        DriveToGoal(goal2,odomsub,0.03);
         disp("Reached goal 2");
 
         % go back to initial position
         goal3 = [initialodom.Pose.Pose.Position.X,initialodom.Pose.Pose.Position.Y,0];
-        DriveToGoal(goal3,odomsub);
+        DriveToGoal(goal3,odomsub,0.03);
     end
 end
 
