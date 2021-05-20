@@ -11,8 +11,7 @@ RobotRotation = quat2eul([RobotRotation.W,RobotRotation.X,RobotRotation.Y,RobotR
 RobotRotation = RobotRotation(1);
 
 T_OC = transl(cameracoords);
-T_CR = transl([0.1 -0.01 cameraheight])*trotx(-pi/2)*troty(pi/2);
-%T_CR = transl([0 0 0])*trotx(-pi/2)*troty(pi/2);
+T_CR = transl([0.1 0.02 cameraheight])*trotx(-pi/2)*troty(pi/2);
 T_RG = transl(odom.Pose.Pose.Position.X, odom.Pose.Pose.Position.Y, 0)*...
     trotz(RobotRotation);
 T_OG = T_RG*T_CR*T_OC;
