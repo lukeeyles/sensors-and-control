@@ -89,7 +89,7 @@ twistmsg.Angular.Z = 0;
 %% Rotate to goal orientation
 
 % Set allowable error
-goalThetaThreshold = 0.05;
+goalThetaThreshold = 1;
 
 % Keep rotating and comparing the current theta while it is not within the range of the desired theta
 while ~((goalTheta-goalThetaThreshold <= currentTheta) && (currentTheta <= goalTheta+goalThetaThreshold))     
