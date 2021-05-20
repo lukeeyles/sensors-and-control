@@ -11,6 +11,7 @@ end
 
 %%
 % subscribers and publishers
+close;
 rgbsub = rossubscriber('/camera/color/image_raw');
 depthsub = rossubscriber('/camera/depth/image_raw');
 odomsub = rossubscriber('/odom',@OdomCallback);
@@ -21,9 +22,9 @@ global twistmsg;    % to store most recent velocities
 % define starting twist message to send
 twistmsg = rosmessage('geometry_msgs/Twist');
 
-K = [1403.06235712328/2.25 0 921.811399720350/2.25;
-    0 1400.47365728127/2.25 546.733853185706/2.25;
-    0 0	1];
+K = [619.759886932052 0 312.973868633392;
+    0 623.938256868104 239.459452920097;
+    0 0 1];
 
 % create timer to send twist messages
 t = timer;
@@ -32,21 +33,23 @@ t.TimerFcn = 'send(velpub,twistmsg)';
 t.Period = 0.1;
 start(t);
 
+% main loop
+%markernames = ["marker_1.jpg","marker_2.jpg","marker_3.jpg"];
+markernames = ["marker_1.jpg","marker_2.jpg"];
+DriveToGoal([0,0,0],odomsub,0.02);
+
 pause(1);
-initialodom = odomsub.LatestMessage;
+initialodom = receive(odomsub,2);
 
 figure(2);
 plot(initialodom.Pose.Pose.Position.X,initialodom.Pose.Pose.Position.Y,'r.');
 hold on;
 
-% main loop
-%markernames = ["marker_1.jpg","marker_2.jpg","marker_3.jpg"];
-markernames = ["marker_1.jpg"];
 for i = 1:numel(markernames)
-    startodom = odomsub.LatestMessage;
+    startodom = receive(odomsub,2);
     startangle = startodom.Pose.Pose.Orientation;
     startangle = quat2eul([startangle.W,startangle.X,startangle.Y,startangle.Z]);
-    startangle = startangle(1)
+    startangle = startangle(1);
     
     qrloc = [];
     depth = [];
@@ -57,11 +60,12 @@ for i = 1:numel(markernames)
     angles = wrapToPi((0:angleIncrement:2*pi)-startangle);
     for angle = angles
         fprintf("Driving to angle: %d\n",rad2deg(angle));
-        DriveToAngle(angle,odomsub,0.03);
+        DriveToAngle(angle,odomsub,0.02);
+        pause(0.5);
         
         % read depth and rgb images, convert to matlab format
-        depthmsg = receive(depthsub,2);
-        rgbmsg = receive(rgbsub,2);
+        depthmsg = receive(depthsub,5);
+        rgbmsg = receive(rgbsub,5);
         depth = readImage(depthmsg);
         rgb = readImage(rgbmsg);
         disp("Received images");
@@ -90,6 +94,7 @@ for i = 1:numel(markernames)
 
         % find robot goal poses
         [goal1,goal2] = FindGoal(centre,normal,odomGlobal,0.2)
+        
         figure(2)
         plot(goal1(1),goal1(2),'b*');
         plot(goal2(1),goal2(2),'g*');
@@ -102,7 +107,7 @@ for i = 1:numel(markernames)
 
         % go back to initial position
         goal3 = [initialodom.Pose.Pose.Position.X,initialodom.Pose.Pose.Position.Y,0];
-        DriveToGoal(goal3,odomsub,0.03);
+        DriveToGoal(goal3,odomsub,0.02);
     end
 end
 
