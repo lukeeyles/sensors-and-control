@@ -17,11 +17,12 @@ meanpointscaled = round(size(depthimg).*meanpoint./size(rgbimg,1,2));
 centredistance = meanpointscaled(2) - leftpointscaled(2);
 
 % match centroid in depth image to centre in rgb image
-arearange = [2000 15000];
+arearange = [2000 25000];
 centroids = FindCentroids(depthimg,arearange);
 closestcentroid = FindClosestPoint(meanpointscaled,fliplr(centroids))
 depthidx(1,:) = closestcentroid + [0 centredistance];
 depthidx(2,:) = closestcentroid - [0 centredistance];
+%depthidx = round(size(depthimg).*cardloc./size(rgbimg,1,2)) % resize coords so we can find the same point on the depth image
 depthidx = round(depthidx);
 depthidx(:,1) = clamp(depthidx(:,1),1,size(depthimg,1));
 depthidx(:,2) = clamp(depthidx(:,2),1,size(depthimg,2));
