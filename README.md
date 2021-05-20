@@ -1,9 +1,9 @@
 # sensors-and-control
 
 Group 16:
-- Luke Eyles
-- Aaron Phan
-- Parsa Jalili Tabaei
+- Parsa Jalili Tabaei 13202460 - 33.33% 
+- Luke Eyles 12883423 - 33.33%
+- Aaron Phan 11409481 - 33.33%
 
 Project 6 - Driving turtlebot along normal of marker
 
